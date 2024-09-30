@@ -1,0 +1,12 @@
+<.header>
+      Row ID <%= @todo_form.id %>
+      <:subtitle>This is a record from your database.</:subtitle>
+    </.header>
+
+    <.list>
+      <:item title="Title"><%= @todo_form.title %></:item>
+      <:item title="Description"><%= @todo_form.description %></:item>
+      <:item title="Status"><%= @todo_form.status %></:item>
+    </.list>
+
+    <.back navigate={~p"/getdata"}>Back to products</.back>

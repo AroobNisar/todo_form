@@ -83,6 +83,7 @@ defmodule TodoWeb do
     quote do
       # HTML escaping functionality
       import Phoenix.HTML
+      import Phoenix.Component
       # Core UI components and translation
       import TodoWeb.CoreComponents
       import TodoWeb.Gettext

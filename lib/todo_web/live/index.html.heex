@@ -1,0 +1,8 @@
+<.form :let={f} for={%{}} phx-change="validate" phx-submit="save">
+  <.input type="text" field={f[:title]} label="Title" /><br>
+  <.input type="textarea" field={f[:description]} label="Description" /><br>
+  <.input type="checkbox" field={f[:status]} label="Completed?"/><br>
+  <.button>Save</.button>
+</.form>
+
+<.back navigate={~p"/getdata"}>Back to products</.back>

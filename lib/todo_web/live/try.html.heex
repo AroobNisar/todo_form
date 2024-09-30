@@ -1,0 +1,29 @@
+ <.header>
+    Listing Products
+    <:actions>
+      <.link patch={~p"/todo"}>
+        <.button>New Product</.button>
+      </.link>
+    </:actions>
+  </.header>
+  <.table id="todo_forms" rows={@streams.todo_forms} row_click={fn {_id, todo_forms} -> JS.navigate(~p"/getdata/#{todo_forms}") end}>
+  <:col :let={{_id, todo_form}} label="ID"><%= todo_form.id %></:col>
+  <:col :let={{_id, todo_form}} label="Title"><%= todo_form.title %></:col>
+  <:col :let={{_id, todo_form}} label="Description"><%= todo_form.description %></:col>
+  <:col :let={{_id, todo_form}} label="Status"><%= todo_form.status %></:col>
+  <:action :let={{id, todo_form}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: todo_form.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+  <:action :let={{_id, todo_form}}>
+    <.link
+      phx-click={JS.navigate(~p"/getdata/#{todo_form}") }
+    >
+      View
+    </.link>
+  </:action>
+</.table>
