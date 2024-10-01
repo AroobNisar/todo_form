@@ -12,7 +12,7 @@ defmodule TodoWeb.Live.Index do
     {:ok, assign(socket, changeset: changeset)}
   end
 
-  def handle_event("validate", %{"title" => _title, "description" => _description, "status" => _status}=todo_form_params, socket) do
+  def handle_event("validate", %{"title" => _title, "description" => _description, "status" => _status, "age" => _age}=todo_form_params, socket) do
     changeset =
       Todo_Form.changeset(%Todo_Form{}, todo_form_params)
       |> Map.put(:action, :validate)
@@ -21,10 +21,11 @@ defmodule TodoWeb.Live.Index do
     {:noreply, assign(socket, changeset: changeset)}
   end
 
-  def handle_event("save", %{"title" => title, "description" => description, "status" => status}, socket) do
+  def handle_event("save", %{"title" => title, "description" => description, "status" => status, "age" => age}, socket) do
     status_bool = if status == "true", do: true, else: false
-    todo_form_params = %{"title" => title, "description" => description, "status" => status_bool}
+    todo_form_params = %{"title" => title, "description" => description, "status" => status_bool, "age" => age}
     changeset = Todo_Form.changeset(%Todo_Form{}, todo_form_params)
+    IO.inspect(changeset)
     case Repo.insert(changeset) do
       {:ok, _todo_form} ->
         {:noreply,

@@ -1,5 +1,5 @@
  <.header>
-    Listing Products
+    Listing Records
     <:actions>
       <.link patch={~p"/todo"}>
         <.button>New Product</.button>
@@ -24,6 +24,13 @@
       phx-click={JS.navigate(~p"/getdata/#{todo_form}") }
     >
       View
+    </.link>
+  </:action>
+  <:action :let={{_id, todo_form}}>
+    <.link
+      phx-click={JS.navigate(~p"/getdata/#{todo_form}/edit") }
+    >
+      Edit
     </.link>
   </:action>
 </.table>

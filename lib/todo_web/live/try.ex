@@ -12,8 +12,8 @@ defmodule TodoWeb.Live.Try do
   end
   def handle_event("delete", %{"id" => id}, socket) do
     todo_forms = Repo.get!(Todo_Form, id)
-    # {:ok, _} = Repo.delete(product)
-    # {:noreply, stream_delete(socket, :products, product)}
+    # {:ok, _} = Repo.delete(todo_forms)
+    # {:noreply, stream_delete(socket, :todo_forms, todo_forms)}
 
     case Repo.delete(todo_forms) do
       {:ok, _} ->
