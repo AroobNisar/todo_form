@@ -1,16 +1,16 @@
 defmodule TodoWeb.Live.Try do
   alias Todo.Todo_Form
   import TodoWeb.CoreComponents
+  import Ecto.Query, only: [from: 2]
   use TodoWeb, :live_view
   alias Todo.Repo
   def mount(_params, _session, socket) do
-    form_list =
-    Todo_Form
-    |> Repo.all()
+    query = from u in Todo_Form, where: is_nil(u.age)
+    form_list = Repo.all(query)
     socket = stream(socket, :todo_forms, form_list)
     {:ok, socket}
   end
-  def handle_event("delete", %{"id" => id}, socket) do
+  def handle_event("delete", %{"iddddd" => id}, socket) do
     todo_forms = Repo.get!(Todo_Form, id)
     # {:ok, _} = Repo.delete(todo_forms)
     # {:noreply, stream_delete(socket, :todo_forms, todo_forms)}
