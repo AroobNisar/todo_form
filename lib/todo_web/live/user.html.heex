@@ -1,0 +1,32 @@
+<.header>
+ Listing Test Results
+<:actions>
+    <.link patch={~p"/user/new"}>
+      <.button>New Test</.button>
+    </.link>
+  </:actions>
+
+</.header>
+<.table id="tests" rows={@test} >
+  <:col :let={test} label="ID"><%= test.id %></:col>
+  <:col :let={test} label="Name"><%= test.name %></:col>
+  <:col :let={test} label="Grade"><%= test.grade %></:col>
+  <:col :let={test} label="Age"><%= test.age %></:col>
+ <:action :let={test}>
+    <.link navigate={~p"/user/#{test.id}"}>
+      <.button>View</.button>
+    </.link>
+  </:action>
+  <:action :let={test} >
+    <.link navigate={~p"/user/#{test.id}/edit"}>
+      <.button>Edit</.button>
+    </.link>
+  </:action>
+  <:action :let={test} >
+    <.link phx-click={JS.push("delete", value: %{id: test.id}) |> hide("##{test.id}")}
+    data-confirm="Are you sure?">
+      <.button>Delete</.button>
+    </.link>
+  </:action>
+</.table>
+

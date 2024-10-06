@@ -18,6 +18,10 @@ defmodule TodoWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/user", Live.User, :user
+    live "/user/new", Live.Form
+    live "/user/:id/edit", Live.Edit, :edit
+    live "/user/:id", Live.Show, :show
   end
 
   # Other scopes may use custom stacks.

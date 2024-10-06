@@ -1,0 +1,7 @@
+<.form :let={f} for={@changeset} phx-change="validate" phx-submit="save">
+    <.input label="Name" field={f[:name]} type="text" />
+    <.input label="Grade" field={f[:grade]} type="text" />
+    <.input label="Age" field={f[:age]} type="number" />
+    <.button >Save</.button>
+    
+</.form>
