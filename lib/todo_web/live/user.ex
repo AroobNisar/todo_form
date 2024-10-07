@@ -7,18 +7,20 @@ defmodule TodoWeb.Live.User do
     user= Repo.all(Test)
     {:ok, assign(socket, :test, user)}
   end
+
   def handle_event("delete", %{"id"=>id}, socket) do
     test= Repo.get!(Test,id)
     case Repo.delete(test) do
-      {:ok, _} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Deleted successfully")
-         |> assign(:tests, Enum.filter(Test, fn u-> u.id != id end))}
+      {:ok, _test}->
+      {:noreply,
+      socket
+        |> put_flash(:info, "Deleted Successfully!")
+        |> assign(:test, Enum.filter(Repo.all(Test), fn u-> u.id != id end))}
 
-        {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, form: changeset)}
     end
+
   end
 
 end

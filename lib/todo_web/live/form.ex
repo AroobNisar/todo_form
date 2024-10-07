@@ -19,13 +19,13 @@ defmodule TodoWeb.Live.Form do
   end
 
   def handle_event("save",  %{"test"=>test_params}, socket) do
-    changeset= Test.changeset(%Test{},test_params)
-    case Repo.insert(changeset) do
-    {:ok, test} ->
+    test= Test.changeset(%Test{},test_params)
+    case Repo.insert(test) do
+    {:ok, _test} ->
       {:noreply,
        socket
        |> put_flash(:info, "User created successfully")
-       |> push_patch(to: ~p"/user")}
+       |> push_navigate(to: ~p"/user")}
 
     {:error, %Ecto.Changeset{} = changeset} ->
       {:noreply, assign(socket, form: to_form(changeset))}

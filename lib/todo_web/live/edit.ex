@@ -20,13 +20,13 @@ defmodule TodoWeb.Live.Edit do
   end
 
   def handle_event("save-edit",  %{"test"=>test_params}, socket) do
-    changeset= Test.changeset(socket.assigns.test,test_params)
-    case Repo.update(changeset) do
-    {:ok, test} ->
+    test= Test.changeset(socket.assigns.test,test_params)
+    case Repo.update(test) do
+    {:ok, _test} ->
       {:noreply,
        socket
-       |> put_flash(:info, "User created successfully")
-       |> push_patch(to: ~p"/user")}
+       |> put_flash(:info, "Updated successfully")
+       |> push_navigate(to: ~p"/user")}
 
     {:error, %Ecto.Changeset{} = changeset} ->
       {:noreply, assign(socket, form: to_form(changeset))}
