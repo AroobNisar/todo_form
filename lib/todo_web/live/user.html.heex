@@ -7,26 +7,37 @@
   </:actions>
 
 </.header>
-<.table id="tests" rows={@test} >
-  <:col :let={test} label="ID"><%= test.id %></:col>
-  <:col :let={test} label="Name"><%= test.name %></:col>
-  <:col :let={test} label="Grade"><%= test.grade %></:col>
-  <:col :let={test} label="Age"><%= test.age %></:col>
- <:action :let={test}>
-    <.link navigate={~p"/user/#{test.id}"}>
+<.table id="tests" rows={@tests} >
+  <:col :let={tests} label="ID"><%= tests.id %></:col>
+  <:col :let={tests} label="Name"><%= tests.name %></:col>
+  <:col :let={tests} label="Grade"><%= tests.grade %></:col>
+  <:col :let={tests} label="Age"><%= tests.age %></:col>
+  <:action :let={tests}>
+    <.link navigate={~p"/user/#{tests.id}"}>
       <.button>View</.button>
     </.link>
   </:action>
-  <:action :let={test} >
-    <.link navigate={~p"/user/#{test.id}/edit"}>
+  <:action :let={tests} >
+    <.link navigate={~p"/user/#{tests.id}/edit"}>
       <.button>Edit</.button>
     </.link>
   </:action>
-  <:action :let={test} >
-    <.link phx-click={JS.push("delete", value: %{id: test.id}) |> hide("##{test.id}")}
+  <:action :let={tests} >
+    <.link phx-click={JS.push("delete", value: %{id: tests.id}) |> hide("##{tests.id}")}
     data-confirm="Are you sure?">
       <.button>Delete</.button>
     </.link>
   </:action>
 </.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="test-modal" show on_cancel={JS.patch(~p"/user")}>
+  <.live_component
+    module={TodoWeb.Live.FormComponent}
+    id={@test.id || :new}
+    title={@page_title}
+    action={@live_action}
+    test={@test}
+    patch={~p"/user"}
+  />
+</.modal>
 

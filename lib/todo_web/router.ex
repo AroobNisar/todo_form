@@ -19,8 +19,8 @@ defmodule TodoWeb.Router do
 
     get "/", PageController, :home
     live "/user", Live.User, :user
-    live "/user/new", Live.Form
-    live "/user/:id/edit", Live.Edit, :edit
+    live "/user/new", Live.User, :new
+    live "/user/:id/edit", Live.User, :edit
     live "/user/:id", Live.Show, :show
   end
 
