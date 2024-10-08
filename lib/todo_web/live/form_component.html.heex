@@ -1,7 +1,8 @@
-<div><.form :let={f} for={@changeset} phx-change="validate" phx-submit="save" phx-target={@myself}>
-    <.input label="Name" field={f[:name]} type="text" />
-    <.input label="Grade" field={f[:grade]} type="text" />
-    <.input label="Age" field={f[:age]} type="number" />
+<div class="bg-sky-900">
+<.form :let={f} for={@changeset} phx-change="validate" phx-submit="save" phx-target={@myself}>
+    <.input label="Name" field={f[:name]} type="text" value={@test.name} /><br>
+    <.input label="Grade" field={f[:grade]} type="text" value={@test.grade} /><br>
+    <.input label="Age" field={f[:age]} type="number" value={@test.age} /><br>
     <.button >Save</.button>
     
 </.form>
