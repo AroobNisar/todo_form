@@ -17,7 +17,7 @@ defmodule TodoWeb do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
+  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt uploads)
 
   def router do
     quote do
@@ -85,6 +85,7 @@ defmodule TodoWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import TodoWeb.CoreComponents
+      import Phoenix.LiveView.Components.MultiSelect
       import TodoWeb.Gettext
 
       # Shortcut for generating JS commands

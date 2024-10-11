@@ -1,0 +1,44 @@
+<.header>
+  Listing Gallaries
+  <:actions>
+    <.link patch={~p"/gallaries/new"}>
+      <.button>New Gallary</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="gallaries"
+  rows={@streams.gallaries}
+  row_click={fn {_id, gallary} -> JS.navigate(~p"/gallaries/#{gallary}") end}
+>
+  <:col :let={{_id, gallary}} label="Name"><%= gallary.name %></:col>
+  <:col :let={{_id, gallary}} label="Author"><%= gallary.author %></:col>
+  <:col :let={{_id, gallary}} label="Image"><img src={gallary.image} style= "width: 100px; height: 100px"/></:col>
+  <:action :let={{_id, gallary}}>
+    <div class="sr-only">
+      <.link navigate={~p"/gallaries/#{gallary}"}>Show</.link>
+    </div>
+    <.link patch={~p"/gallaries/#{gallary}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, gallary}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: gallary.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+
+<.modal :if={@live_action in [:new, :edit]} id="gallary-modal" show on_cancel={JS.patch(~p"/")}>
+  <.live_component
+    module={TodoWeb.GallaryLive.FormComponent}
+    id={@gallary.id || :new}
+    title={@page_title}
+    action={@live_action}
+    gallary={@gallary}
+    patch={~p"/"}
+  />
+</.modal>

@@ -17,7 +17,13 @@ defmodule TodoWeb.Router do
   scope "/", TodoWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", GallaryLive.Index, :index
+    live "/gallaries/new", GallaryLive.Index, :new
+    live "/gallaries/filter", GallaryLive.Index, :filter
+    live "/gallaries/:id/edit", GallaryLive.Index, :edit
+    live "/gallaries/:id", GallaryLive.Show, :show
+    live "/gallaries/:id/show/edit", GallaryLive.Show, :edit
+
   end
 
   # Other scopes may use custom stacks.
