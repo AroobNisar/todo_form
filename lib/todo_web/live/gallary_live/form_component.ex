@@ -60,7 +60,6 @@ defmodule TodoWeb.GallaryLive.FormComponent do
   end
 
   defp handle_progress(:image, entry, socket) do
-    IO.inspect(entry, label: "See entry")
     progress = entry.progress
     socket = assign(socket, :upload_progress, progress)
 
