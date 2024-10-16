@@ -28,7 +28,6 @@ defmodule TodoWeb.GallaryLive.Index do
   end
 
   defp apply_action(socket, :index, params) do
-    IO.inspect(Map.get(socket.assigns, :filter), label: "checkfinsocket")
     filter = Repo.get_by(Filter, page: "gallery") || %Filter{} |> IO.inspect(label: "seeehereerer")
     socket
     |> assign(:filter, filter)
