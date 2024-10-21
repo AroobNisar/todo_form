@@ -69,6 +69,49 @@ defmodule TodoWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
+      <div>
+        <.simple_form for={@time_form} id="time_form" phx-submit="update_date_time">
+          <.label>Time Zone</.label>
+          <%= IO.inspect(@selected_time_zone) %>
+          <.input
+            type="select"
+            name="selected_time_zone"
+            options={@time_zone_list}
+            value={@selected_time_zone}
+            name="time_form[time_zone]"
+            class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+          >
+          </.input>
+          <.label>Time Format</.label>
+          <select
+            name="time_form[time_format]"
+            class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+          >
+            <%= for {label, format} <- @time_format_list do %>
+              <option value={format}><%= label %></option>
+            <% end %>
+          </select>
+          <.label>Date Format</.label>
+          <select
+            name="time_form[date_format]"
+            class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+          >
+            <%= for {label, format} <- @date_format_list do %>
+              <option value={format}><%= label %></option>
+            <% end %>
+          </select>
+          <:actions>
+            <.button phx-disable-with="Setting...">Set Date & Time</.button>
+          </:actions>
+        </.simple_form>
+      </div>
+
+      <div>
+        <h3>Current Date and Time</h3>
+        <p>
+          <%= format_date_time(@date_time, @selected_date_format, @selected_time_format) %>
+        </p>
+      </div>
     </div>
     """
   end
@@ -87,9 +130,31 @@ defmodule TodoWeb.UserSettingsLive do
   end
 
   def mount(_params, _session, socket) do
+    time_zone_list = Tzdata.zone_list()
+
+    date_format_list = [
+      {"YYYY-MM-DD", "%Y-%m-%d"},
+      {"DD/MM/YYYY", "%d/%m/%Y"},
+      {"MM/DD/YYYY", "%m/%d/%Y"},
+      {"Month Day, Year", "%B %d, %Y"},
+      {"Day-Month-Year", "%d-%B-%Y"}
+    ]
+
+    time_format_list = [
+      {"24-hours", "%H:%M"},
+      {"12-hour (AM/PM)", "%I:%M %p"},
+      {"12-hour (am/pm)", "%I:%M %P"}
+    ]
+
+    time_zone = socket.assigns.current_user.time_zone || "Etc/UTC"
+    time_zone = if time_zone in [nil, ""], do: "Etc/UTC", else: time_zone
+    time_format = socket.assigns.current_user.time_format
+    date_format = socket.assigns.current_user.date_format
+    {:ok, date_time} = DateTime.shift_zone(DateTime.utc_now(), time_zone)
     user = socket.assigns.current_user
     email_changeset = Accounts.change_user_email(user)
     password_changeset = Accounts.change_user_password(user)
+    time_changeset = Accounts.change_user_time(user)
 
     socket =
       socket
@@ -98,7 +163,15 @@ defmodule TodoWeb.UserSettingsLive do
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
+      |> assign(:time_form, to_form(time_changeset))
       |> assign(:trigger_submit, false)
+      |> assign(:time_zone_list, time_zone_list)
+      |> assign(:time_format_list, time_format_list)
+      |> assign(:date_format_list, date_format_list)
+      |> assign(:selected_time_zone, time_zone)
+      |> assign(:selected_time_format, time_format)
+      |> assign(:selected_date_format, date_format)
+      |> assign(:date_time, date_time)
 
     {:ok, socket}
   end
@@ -163,5 +236,53 @@ defmodule TodoWeb.UserSettingsLive do
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
     end
+  end
+
+  # def handle_event("validate_date_time", %{"time_form" => form_data}, socket) do
+
+  #   date_format = form_data["date_format"]|> IO.inspect()
+  #   date = Calendar.strftime(Date.utc_today(), date_format)|> IO.inspect()
+  #   socket =
+  #     socket
+  #     |> assign(:date, date)
+
+  #   {:noreply, socket}
+  # end
+
+  def handle_event("update_date_time", %{"time_form" => form_data}, socket) do
+    IO.inspect(form_data)
+    time_zone = form_data["time_zone"] |> IO.inspect()
+    time_format = form_data["time_format"] |> IO.inspect()
+    date_format = form_data["date_format"] |> IO.inspect()
+    {:ok, date_time} = DateTime.shift_zone(DateTime.utc_now(), time_zone)
+    user = socket.assigns.current_user
+
+    case Accounts.update_user_time(user, form_data) do
+      {:ok, user} ->
+        time_form =
+          user
+          |> Accounts.change_user_time(form_data)
+          |> to_form()
+
+        socket =
+          socket
+          |> assign(:selected_time_zone, time_zone)
+          |> assign(:selected_time_format, time_format)
+          |> assign(:selected_date_format, date_format)
+          |> assign(:date_time, date_time)
+          |> assign(:time_form, to_form(time_form))
+          |> put_flash(:info, "selected")
+
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, password_form: to_form(changeset))}
+    end
+  end
+
+  @spec format_date_time(map(), any(), any()) :: binary()
+  def format_date_time(date_time, date_format, time_format) do
+    format_string = "#{date_format} #{time_format}"
+    Calendar.strftime(date_time, format_string)
   end
 end

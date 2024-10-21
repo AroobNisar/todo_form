@@ -45,6 +45,17 @@ defmodule TodoWeb.Router do
     end
   end
 
+  scope "/", TodoWeb do
+    pipe_through :browser
+
+    live "/galleries", GalleryLive.Index, :index
+    live "/galleries/new", GalleryLive.Index, :new
+    live "/galleries/:id/edit", GalleryLive.Index, :edit
+
+    live "/galleries/:id", GalleryLive.Show, :show
+    live "/galleries/:id/show/edit", GalleryLive.Show, :edit
+  end
+
   ## Authentication routes
 
   scope "/", TodoWeb do

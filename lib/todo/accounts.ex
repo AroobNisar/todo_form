@@ -108,6 +108,10 @@ defmodule Todo.Accounts do
     User.email_changeset(user, attrs, validate_email: false)
   end
 
+  def change_user_time(user, attrs \\ %{}) do
+    User.time_changeset(user, attrs)
+  end
+
   @doc """
   Emulates that the email will change without actually changing
   it in the database.
@@ -213,6 +217,14 @@ defmodule Todo.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  def update_user_time(user, attrs) do
+    changeset =
+      user
+      |> User.time_changeset(attrs)
+
+    Repo.update(changeset)
   end
 
   ## Session

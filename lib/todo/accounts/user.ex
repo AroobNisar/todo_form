@@ -7,6 +7,9 @@ defmodule Todo.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
+    field :time_zone, :string
+    field :time_format, :string
+    field :date_format, :string
     field :confirmed_at, :utc_datetime
 
     timestamps(type: :utc_datetime)
@@ -120,6 +123,12 @@ defmodule Todo.Accounts.User do
     |> cast(attrs, [:password])
     |> validate_confirmation(:password, message: "does not match password")
     |> validate_password(opts)
+  end
+
+  def time_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:time_zone, :time_format, :date_format])
+    |> validate_required([:time_zone, :time_format, :date_format])
   end
 
   @doc """
