@@ -71,35 +71,33 @@ defmodule TodoWeb.UserSettingsLive do
       </div>
       <div>
         <.simple_form for={@time_form} id="time_form" phx-submit="update_date_time">
-          <.label>Time Zone</.label>
-          <%= IO.inspect(@selected_time_zone) %>
           <.input
             type="select"
-            name="selected_time_zone"
+            name="time_zone"
             options={@time_zone_list}
             value={@selected_time_zone}
-            name="time_form[time_zone]"
+            label="Time Zone"
+            field={@time_form[:time_zone]}
             class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
-          >
-          </.input>
-          <.label>Time Format</.label>
-          <select
-            name="time_form[time_format]"
+          />
+          <.input
+            type="select"
+            name="time_format"
+            options={@time_format_list}
+            value={@selected_time_format}
+            label="Time Format"
+            field={@time_form[:time_format]}
             class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
-          >
-            <%= for {label, format} <- @time_format_list do %>
-              <option value={format}><%= label %></option>
-            <% end %>
-          </select>
-          <.label>Date Format</.label>
-          <select
-            name="time_form[date_format]"
+          />
+          <.input
+            type="select"
+            name="date_format"
+            options={@date_format_list}
+            value={@selected_date_format}
+            label="Date Format"
+            field={@time_form[:date_format]}
             class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
-          >
-            <%= for {label, format} <- @date_format_list do %>
-              <option value={format}><%= label %></option>
-            <% end %>
-          </select>
+          />
           <:actions>
             <.button phx-disable-with="Setting...">Set Date & Time</.button>
           </:actions>
@@ -249,11 +247,10 @@ defmodule TodoWeb.UserSettingsLive do
   #   {:noreply, socket}
   # end
 
-  def handle_event("update_date_time", %{"time_form" => form_data}, socket) do
-    IO.inspect(form_data)
-    time_zone = form_data["time_zone"] |> IO.inspect()
-    time_format = form_data["time_format"] |> IO.inspect()
-    date_format = form_data["date_format"] |> IO.inspect()
+  def handle_event("update_date_time", %{"date_format" => date_format, "time_format" => time_format, "time_zone" => time_zone} = form_data, socket) do
+    time_zone  |> IO.inspect()
+    time_format |> IO.inspect()
+    date_format |> IO.inspect()
     {:ok, date_time} = DateTime.shift_zone(DateTime.utc_now(), time_zone)
     user = socket.assigns.current_user
 
