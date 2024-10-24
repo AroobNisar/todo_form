@@ -247,8 +247,13 @@ defmodule TodoWeb.UserSettingsLive do
   #   {:noreply, socket}
   # end
 
-  def handle_event("update_date_time", %{"date_format" => date_format, "time_format" => time_format, "time_zone" => time_zone} = form_data, socket) do
-    time_zone  |> IO.inspect()
+  def handle_event(
+        "update_date_time",
+        %{"date_format" => date_format, "time_format" => time_format, "time_zone" => time_zone} =
+          form_data,
+        socket
+      ) do
+    time_zone |> IO.inspect()
     time_format |> IO.inspect()
     date_format |> IO.inspect()
     {:ok, date_time} = DateTime.shift_zone(DateTime.utc_now(), time_zone)
@@ -277,7 +282,6 @@ defmodule TodoWeb.UserSettingsLive do
     end
   end
 
-  @spec format_date_time(map(), any(), any()) :: binary()
   def format_date_time(date_time, date_format, time_format) do
     format_string = "#{date_format} #{time_format}"
     Calendar.strftime(date_time, format_string)

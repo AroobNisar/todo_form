@@ -33,6 +33,7 @@ defmodule Todo.MixProject do
   defp deps do
     [
       {:bcrypt_elixir, "~> 3.0"},
+      {:phoenix_form_awesomplete, "~> 1.0"},
       {:timex, "~> 3.7"},
       {:tzdata, "~> 1.1"},
       {:phoenix, "~> 1.7.14"},
