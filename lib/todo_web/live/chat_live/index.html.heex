@@ -7,8 +7,8 @@
     <% end %>
     
   </div>
-  <form phx-submit="send">
-    <input type="text" name="text" value="" />
-    <button type="submit">Send</button>
-  </form>
+  <.form phx-submit="send" :let={f} for={%{}}>
+    <.input type="text" field={f[:text]} placeholder="Enter Message"/>
+    <.button type="submit">Send</.button>
+  </.form>
 </div>

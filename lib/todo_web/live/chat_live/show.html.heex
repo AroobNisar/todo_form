@@ -1,0 +1,14 @@
+<div>
+  <h1>My All Chat Rooms</h1>
+  <br /><br />
+  <%= for r <- @rooms do %>
+    <div><.link navigate={~p"/chat/#{r}"}>Chat Room <%= r %></.link></div>
+  <% end %>
+  <br /><br />
+  <h1>Start New Chat Room</h1>
+  <br />
+  <.form :let={f} for={%{}} phx-submit="new-room">
+    <.input type="text" field={f[:room]} label="Enter new chat room name" /><br />
+    <.button type="submit" phx-disable-with="Creating Room">Create Room</.button>
+  </.form>
+</div>
