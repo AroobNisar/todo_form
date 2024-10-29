@@ -1,0 +1,71 @@
+<.header>
+  Listing Books
+  <:actions>
+    <.link patch={~p"/books/new"}>
+      <.button>New Book</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="books" rows={@books} row_click={fn book -> JS.navigate(~p"/books/#{book}") end}>
+  <:col :let={book} label="Title"><%= book.title %></:col>
+  <:col :let={book} label="Author"><%= book.author %></:col>
+  <:col :let={book} label="Version"><%= book.version %></:col>
+  <:action :let={book}>
+    <div class="sr-only">
+      <.link navigate={~p"/books/#{book}"}>Show</.link>
+    </div>
+    <.link patch={~p"/books/#{book}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={book}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: book.id}) |> hide("##{book.id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+<div class="pagination">
+  <%= if @page_number > 1 do %>
+    <%= live_patch("<< Prev Page",
+      to: TodoWeb.Router.Helpers.book_index_path(@socket, :index, page: @page_number - 1),
+      class: "pagination-link"
+    ) %>
+  <% end %>
+  <div  style="display: flex; flex-direction: row; padding: 2px;">
+    <%= for idx <-  Enum.to_list(1..@total_pages) do %>
+      <%= live_patch(
+        to: TodoWeb.Router.Helpers.book_index_path(@socket, :index, page: idx),
+        class: "pagination-link"
+        ) do %>
+          <%= if @page_number == idx do %>
+            <p style="border: 1px solid black; padding-left: 5px; padding-right: 5px;">
+              <%= idx %>
+            </p>
+          <% else %>
+            <p style="padding-left: 5px; padding-right: 5px;">
+              <%= idx %>
+            </p>
+          <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <%= if @page_number < @total_pages do %>
+    <%= live_patch("Next Page >>",
+      to: TodoWeb.Router.Helpers.book_index_path(@socket, :index, page: @page_number + 1),
+      class: "pagination-link"
+    ) %>
+  <% end %>
+</div>
+
+<.modal :if={@live_action in [:new, :edit]} id="book-modal" show on_cancel={JS.patch(~p"/")}>
+  <.live_component
+    module={TodoWeb.BookLive.FormComponent}
+    id={@book.id || :new}
+    title={@page_title}
+    action={@live_action}
+    book={@book}
+    patch={~p"/"}
+  />
+</.modal>
