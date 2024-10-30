@@ -15,9 +15,7 @@ defmodule TodoWeb.PostLive.FormComponent do
       <.simple_form
         for={@form}
         id="post-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
+        action={~p"/post"}
       >
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:author]} type="text" label="Author" />

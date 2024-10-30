@@ -7,7 +7,7 @@ defmodule TodoWeb.PostLive.Index do
   import Ecto.Query
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, session, socket) do
     posts = Repo.all(from(p in Post, limit: 10, offset: 0))
     total_pages = Enum.count(Repo.all(Post)) / 10 |> ceil()
     {:ok, assign(socket, posts: posts, offset: nil, page_number: 1, total_pages: total_pages)}
