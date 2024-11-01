@@ -1,0 +1,16 @@
+<.header>
+Showing Record of ID <%= @test.id %>
+<:actions>
+    <.link patch={~p"/user/#{@test.id}/edit"}>
+      <.button>Edit</.button>
+    </.link>
+</:actions>
+</.header>
+<.list >
+  <:item title="ID"><%= @test.id%></:item>
+  <:item title="Name"><%= @test.name%></:item>
+  <:item title="Grade"><%= @test.grade%></:item>
+  <:item title="Age"><%= @test.age%></:item>
+</.list>
+
+<.back navigate={~p"/user"}>Back to Listing Results</.back>

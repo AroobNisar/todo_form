@@ -1,0 +1,44 @@
+<.header>
+ Listing Test Results
+<:actions>
+    <.link patch={~p"/user/new"}>
+      <.button>New Test</.button>
+    </.link>
+  </:actions>
+
+</.header>
+<.table id="tests" rows={@tests} >
+  <:col :let={tests} label="ID"><%= tests.id %></:col>
+  <:col :let={tests} label="Name"><%= tests.name %></:col>
+  <:col :let={tests} label="Grade"><%= tests.grade %></:col>
+  <:col :let={tests} label="Age"><%= tests.age %></:col>
+  <:action :let={tests}>
+    <.link navigate={~p"/user/#{tests.id}"}>
+      <.button>View</.button>
+    </.link>
+  </:action>
+  <:action :let={tests} >
+    <.link navigate={~p"/user/#{tests.id}/edit"}>
+      <.button>Edit</.button>
+    </.link>
+  </:action>
+  <:action :let={tests} >
+    <.link phx-click={JS.push("delete", value: %{id: tests.id}) |> hide("##{tests.id}")}
+    data-confirm="Are you sure?">
+      <.button>Delete</.button>
+    </.link>
+  </:action>
+</.table>
+<div class="bg-sky-900">
+<.modal :if={@live_action in [:new, :edit]} id="test-modal" show on_cancel={JS.patch(~p"/user")}>
+  <.live_component
+    module={TodoWeb.Live.FormComponent}
+    id={@test.id || :new}
+    title={@page_title}
+    action={@live_action}
+    test={@test}
+    patch={~p"/user"}
+  />
+</.modal>
+</div>
+
