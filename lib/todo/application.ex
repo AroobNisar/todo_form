@@ -10,6 +10,7 @@ defmodule Todo.Application do
     children = [
       TodoWeb.Telemetry,
       Todo.Repo,
+      {Oban, Application.fetch_env!(:todo, Oban)},
       {DNSCluster, query: Application.get_env(:todo, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Todo.PubSub},
       # Start the Finch HTTP client for sending emails
