@@ -1,0 +1,89 @@
+<.header>
+  Listing Tasks
+  <:actions>
+    <.link patch={~p"/tasks/new"}>
+      <.button>New Task</.button>
+    </.link>
+  </:actions>
+</.header>
+<.simple_form :let={f} for={%{}} id="search-form" phx-change="search">
+  <.input field={f[:search]} type="search" autocomplete="on" label="Search" />
+  <div class="selected">
+    <%= if Enum.any?(@form) do %>
+      <ul>
+        <%= for {item, _index} <- Enum.with_index(@form) do %>
+          <li class="item">
+            <span>
+              <%= item.name %>
+            </span>
+            <span>
+              <%= item.description %>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</.simple_form>
+<table style="width:100%; margin-top:20px">
+  <thead>
+    <tr style="text-align: left;">
+      <th style="border: 1px solid #ddd;">Name</th>
+      <th style="border: 1px solid #ddd;">Description</th>
+      <th style="border: 1px solid #ddd;">Image</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for app <- @query do %>
+      <tr>
+        <td style="border: 1px solid #ddd;"><%= app.name %></td>
+        <td style="border: 1px solid #ddd;"><%= app.description %></td>
+        <td style="border: 1px solid #ddd;">
+          <img src={app.image} alt="task image" style="width: 100px; height: 100px" />
+        </td>
+        <td style="border: 1px solid #ddd;"><a href={"/tasks/#{app.id}"}>Show</a></td>
+        <td style="border: 1px solid #ddd;"><a href={"/tasks/#{app.id}/edit"}>Edit</a></td>
+        <td style="border: 1px solid #ddd;">
+          <.button
+            phx-click={JS.push("delete", value: %{id: app.id})}
+            data-confirm="Are you sure?"
+          >
+            Delete
+          </.button>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br /> <br /> <br />
+<.header>
+  Increment & Decrement
+</.header>
+<div>
+  <p style="font-size: 60px"><%= @number %></p>
+  <br />
+  <.button phx-click={JS.push("increment", value: %{number: @number})}>Increment</.button>
+  <br /><br />
+  <.button phx-click={JS.push("decrement", value: %{number: @number})}>Decrement</.button>
+</div>
+<br /> <br /> <br />
+<.header>
+  Stop Watch
+</.header>
+<div style="font-size: 60px">
+  <%= Time.from_seconds_after_midnight(@seconds) %>
+  <.button phx-click="start-clock">Start</.button>
+  <.button phx-click={JS.push("stop-clock", value: %{seconds: @seconds})}>Stop</.button>
+  <.button phx-click={JS.push("reset-clock", value: %{seconds: @seconds})}>Reset</.button>
+</div>
+
+<.modal :if={@live_action in [:new, :edit]} id="task-modal" show on_cancel={JS.patch(~p"/tasks")}>
+  <.live_component
+    module={TodoWeb.TaskLive.FormComponent}
+    id={@task.id || :new}
+    title={@page_title}
+    action={@live_action}
+    task={@task}
+    patch={~p"/tasks"}
+  />
+</.modal>
