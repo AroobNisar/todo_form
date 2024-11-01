@@ -14,6 +14,12 @@ defmodule TodoWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/api", TodoWeb do
+    pipe_through :api
+    get "/index", QuoteController, :index
+    get "/index/random", QuoteController, :show
+  end
+
   scope "/", TodoWeb do
     pipe_through :browser
 
