@@ -1,0 +1,16 @@
+<.header>
+    Editing Product <%= @todo_form.id %>
+    <:subtitle>Use this form to edit product records in your database.</:subtitle>
+</.header>
+
+  
+<.form :let={f} for={%{}} phx-change="validate-form" phx-submit="save-form">
+  <.input type="text" field={f[:title]} label="Title" value={@todo_form.title} /><br>
+  <.input type="textarea" field={f[:description]} label="Description" value={@todo_form.description} /><br>
+  <.input type="number" field={f[:age]} label="Age" value={@todo_form.age} /><br>
+  <.input type="checkbox" field={f[:status]} label="Completed?" value={@todo_form.status} /><br>
+  <.button>Save</.button>
+</.form>
+  
+
+  <.back navigate={~p"/getdata/#{@todo_form}"}>View Record</.back>
