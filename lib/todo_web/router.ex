@@ -16,14 +16,16 @@ defmodule TodoWeb.Router do
 
   scope "/", TodoWeb do
     pipe_through :browser
+    live "/", GalleryLive.Index, :index
+    live "/galleries/new", GalleryLive.Index, :new
+    live "/galleries/:id/edit", GalleryLive.Index, :edit
 
-    get "/", PageController, :home
+    live "/galleries/:id", GalleryLive.Show, :show
+    live "/galleries/:id/show/edit", GalleryLive.Show, :edit
+
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", TodoWeb do
-  #   pipe_through :api
-  # end
+
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:todo, :dev_routes) do
