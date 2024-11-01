@@ -1,4 +1,5 @@
 defmodule TodoWeb.PostLive.FormComponent do
+alias Todo.Posts.Post
   use TodoWeb, :live_component
 
   alias Todo.Posts
@@ -15,10 +16,12 @@ defmodule TodoWeb.PostLive.FormComponent do
       <.simple_form
         for={@form}
         id="post-form"
-        action={~p"/post"}
+        action={if @id == :new, do: TodoWeb.Router.Helpers.page_path(@socket, :create), else: TodoWeb.Router.Helpers.page_path(@socket, :edit, @id)}
+        method={if @id == :new, do: "post", else: "put"}
       >
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:author]} type="text" label="Author" />
+        <.input field={@form[:status]} type="select" options={Ecto.Enum.values(Post, :status)} label="Status" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Post</.button>
         </:actions>
@@ -29,9 +32,13 @@ defmodule TodoWeb.PostLive.FormComponent do
 
   @impl true
   def update(%{post: post} = assigns, socket) do
+    id = assigns.id |> IO.inspect(label: "IDDD")
+    action = assigns.action
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:action, action)
+     |> assign(:id, id)
      |> assign_new(:form, fn ->
        to_form(Posts.change_post(post))
      end)}

@@ -5,6 +5,7 @@ defmodule Todo.Posts.Post do
   schema "posts" do
     field :name, :string
     field :author, :string
+    field :status, Ecto.Enum, values: [:complete, :archeived]
 
     timestamps(type: :utc_datetime)
   end
@@ -12,7 +13,7 @@ defmodule Todo.Posts.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:name, :author])
+    |> cast(attrs, [:name, :author, :status])
     |> validate_required([:name, :author])
   end
 end

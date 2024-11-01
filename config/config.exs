@@ -11,6 +11,17 @@ config :todo,
   ecto_repos: [Todo.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :todo, Oban,
+  engine: Oban.Engines.Basic,
+  queues: [default: 2],
+  plugins: [
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"*/15 * * * *", Todo.Workers.Basic}
+     ]}
+  ],
+  repo: Todo.Repo
+
 # Configures the endpoint
 config :todo, TodoWeb.Endpoint,
   url: [host: "localhost"],

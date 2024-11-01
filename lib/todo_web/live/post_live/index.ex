@@ -7,7 +7,7 @@ defmodule TodoWeb.PostLive.Index do
   import Ecto.Query
 
   @impl true
-  def mount(params, session, socket) do
+  def mount(_params, _session, socket) do
     posts = Repo.all(from(p in Post, limit: 10, offset: 0))
     total_pages = Enum.count(Repo.all(Post)) / 10 |> ceil()
     {:ok, assign(socket, posts: posts, offset: nil, page_number: 1, total_pages: total_pages)}
@@ -65,7 +65,7 @@ defmodule TodoWeb.PostLive.Index do
   def handle_event("delete", %{"id" => id}, socket) do
     post = Posts.get_post!(id)
     {:ok, _} = Posts.delete_post(post)
-    total_pages = Enum.count(Repo.all(Post)) / 10 |> ceil()
+    total_pages = Enum.count(Enum.filter(socket.assigns.posts, fn u -> u.id != id end)) / 10 |> ceil()
     updated_posts = Enum.filter(socket.assigns.posts, fn u -> u.id != id end)
     {:noreply, assign(socket, :posts, updated_posts) |> assign(:total_pages, total_pages)}
   end

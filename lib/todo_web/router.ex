@@ -19,6 +19,7 @@ defmodule TodoWeb.Router do
 
     get "/", PageController, :home
     post "/post", PageController, :create
+    put "/post/:id", PageController, :edit
     live "/posts", PostLive.Index, :index
     live "/posts/new", PostLive.Index, :new
     live "/posts/:id/edit", PostLive.Index, :edit

@@ -14,6 +14,7 @@
 >
   <:col :let={post} label="Name"><%= post.name %></:col>
   <:col :let={post} label="Author"><%= post.author %></:col>
+  <:col :let={post} label="Status"><%= post.status %></:col>
   <:action :let={post}>
     <div class="sr-only">
       <.link navigate={~p"/posts/#{post}"}>Show</.link>
