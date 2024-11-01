@@ -1,0 +1,28 @@
+<.header>
+  Gallary <%= @gallary.id %>
+  <:subtitle>This is a gallary record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/gallaries/#{@gallary}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit gallary</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @gallary.name %></:item>
+  <:item title="Author"><%= @gallary.author %></:item>
+  <:item title="Image"><img src={@gallary.image} style= "width: 100px; height: 100px"/></:item>
+</.list>
+
+<.back navigate={~p"/"}>Back to gallaries</.back>
+<%= @gallary.image %>
+<.modal :if={@live_action == :edit} id="gallary-modal" show on_cancel={JS.patch(~p"/gallaries/#{@gallary}")}>
+  <.live_component
+    module={TodoWeb.GallaryLive.FormComponent}
+    id={@gallary.id}
+    title={@page_title}
+    action={@live_action}
+    gallary={@gallary}
+    patch={~p"/gallaries/#{@gallary}"}
+  />
+</.modal>
