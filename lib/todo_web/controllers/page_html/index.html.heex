@@ -1,0 +1,27 @@
+<.header>
+  Listing Tasks
+  <:actions>
+    <.button>
+      <%= live_patch("New Task", to: TodoWeb.Router.Helpers.page_path(@conn, :new)) %>
+    </.button>
+  </:actions>
+</.header>
+<.table id="tasks" rows={@tasks}>
+  <:col :let={task} label="Title"><%= task.title %></:col>
+  <:col :let={task} label="Description"><%= task.description %></:col>
+  <:action :let={task}>
+    <%= live_patch("Show", to: TodoWeb.Router.Helpers.page_path(@conn, :show, task)) %> | <%= live_patch(
+      "Edit",
+      to: TodoWeb.Router.Helpers.page_path(@conn, :edit, task)
+    ) %>
+    <.simple_form
+      for={%{}}
+      id="delete-task-form"
+      action={TodoWeb.Router.Helpers.page_path(@conn, :delete, task)}
+      method="delete"
+      data-confirm="Are you sure?"
+    >
+      <.button class="btn btn-danger" phx-disable-with="Deleting...">Delete</.button>
+    </.simple_form>
+  </:action>
+</.table>

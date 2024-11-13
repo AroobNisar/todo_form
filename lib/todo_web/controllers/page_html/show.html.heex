@@ -1,0 +1,7 @@
+<h1>Task Details</h1>
+
+<p>Title: <%= @task.title %></p>
+<p>Description: <%= @task.description %></p>
+
+<%= live_patch("Back to List", to: TodoWeb.Router.Helpers.page_path(@conn, :index)) %> |
+<%= live_patch("Edit", to: TodoWeb.Router.Helpers.page_path(@conn, :edit, @task)) %>
