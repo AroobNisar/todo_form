@@ -1,0 +1,19 @@
+<h1>Edit Task</h1>
+
+<.simple_form
+  :let={f}
+  for={@changeset}
+  id="task-form"
+  action={TodoWeb.Router.Helpers.page_path(@conn, :update, @task)}
+  method="put"
+>
+  <.input field={f[:title]} type="text" label="Title" />
+
+  <.input field={f[:description]} type="textarea" label="Description" />
+
+  <:actions>
+    <.button phx-disable-with="Updating...">Update Task</.button>
+  </:actions>
+</.simple_form>
+
+<%= live_patch("Back to List", to: TodoWeb.Router.Helpers.page_path(@conn, :index)) %>
