@@ -1,0 +1,19 @@
+<.form
+  for={%{}}
+  phx-submit="upload_file"
+  phx-change="validate_upload"
+  phx-drop-target={@uploads.file.ref}
+>
+  <.live_file_input upload={@uploads.file} />
+  <button type="submit">Upload</button>
+</.form>
+
+<%= if @pdf_data do %>
+  <h3>Extracted Text Data:</h3>
+  <pre><%= @pdf_data %></pre>
+<% end %>
+
+<%= if @error_message do %>
+  <h3>Error:</h3>
+  <p><%= @error_message %></p>
+<% end %>

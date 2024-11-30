@@ -12,6 +12,7 @@ defmodule Todo.Application do
       Todo.Repo,
       {DNSCluster, query: Application.get_env(:todo, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Todo.PubSub},
+      {Oban, Application.fetch_env!(:todo, Oban)},
       # Start the Finch HTTP client for sending emails
       {Finch, name: Todo.Finch},
       # Start a worker by calling: Todo.Worker.start_link(arg)

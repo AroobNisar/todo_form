@@ -11,6 +11,22 @@ config :todo,
   ecto_repos: [Todo.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :todo, Oban,
+  repo: Todo.Repo,
+  queues: [default: 5],
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 3600 * 24},
+    {Oban.Plugins.Cron,
+     crontab: [
+       # {"@daily", Fintract.Workers.ExampleWorker}
+       # {"* * * * *", EveryMinuteWorker},
+       # {"0 * * * *", EveryHourWorker},
+       # {"0 */6 * * *", EverySixHoursWorker},
+       # {"0 0 * * SUN", EverySundayWorker},
+       # More examples: https://crontab.guru/examples.html
+     ]}
+  ]
+
 # Configures the endpoint
 config :todo, TodoWeb.Endpoint,
   url: [host: "localhost"],
